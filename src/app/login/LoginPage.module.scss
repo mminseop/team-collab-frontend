@@ -1,0 +1,32 @@
+.pageWrap {
+  display: flex;
+  justify-content: center;
+  background-color: #f5f6f8;
+  padding: 4rem;
+  height: 100vh;
+}
+
+.loginCard {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 400px;
+  height: 400px;
+}
+
+.logoText {
+  font-weight: bold;
+  font-size: 2rem;
+  color: #1976d2;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-top: 2rem;
+}

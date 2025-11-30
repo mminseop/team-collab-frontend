@@ -2,7 +2,15 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, IconButton, InputAdornment } from "@mui/material";
+import {
+  Visibility,
+  VisibilityOff,
+  ChatBubbleOutline,
+  FolderOutlined,
+  BarChartOutlined,
+  GroupOutlined,
+} from "@mui/icons-material";
 import st from "./loginPage.module.scss";
 
 export default function LoginPage() {
@@ -10,15 +18,16 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     setIsLoading(true);
     try {
-      // 가짜 이메일/비밀번호 체크
+      // 이메일/비밀번호 체크
       if (email === "admin" && password === "admin") {
-        router.replace("/dashboard"); // 성공 시 대시보드 이동
+        router.replace("/dashboard"); // 성공 > 대시보드 이동
       } else {
         alert("이메일 또는 비밀번호가 잘못되었습니다.");
       }
@@ -29,35 +38,159 @@ export default function LoginPage() {
 
   return (
     <div className={st.pageWrap}>
-      <div className={st.loginCard}>
-        <div className={st.logoText} onClick={() => router.push("/")}>
-          TeamCollab
+      <div className={st.loginContainer}>
+        <div className={st.loginCard}>
+          <div className={st.logoSection}>
+            <div className={st.logoIcon}>TC</div>
+            <h1 className={st.logoText}>TeamCollab</h1>
+            <p className={st.subtitle}>
+              팀 협업 인트라넷에 오신 것을 환영합니다
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className={st.form}>
+            <div className={st.inputGroup}>
+              <label className={st.label}>이메일</label>
+              <TextField
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                fullWidth
+                variant="outlined"
+                placeholder="이메일을 입력하세요"
+                required
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                    backgroundColor: "#f8fafc",
+                    transition: "all 0.3s",
+                    "&:hover": {
+                      backgroundColor: "#f1f5f9",
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "#ffffff",
+                      "& fieldset": {
+                        borderColor: "#667eea",
+                        borderWidth: "2px",
+                      },
+                    },
+                    "& fieldset": {
+                      borderColor: "#e2e8f0",
+                    },
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    padding: "14px 16px",
+                  },
+                }}
+              />
+            </div>
+
+            <div className={st.inputGroup}>
+              <label className={st.label}>비밀번호</label>
+              <TextField
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                variant="outlined"
+                placeholder="비밀번호를 입력하세요"
+                required
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword(!showPassword)}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                    backgroundColor: "#f8fafc",
+                    transition: "all 0.3s",
+                    "&:hover": {
+                      backgroundColor: "#f1f5f9",
+                    },
+                    "&.Mui-focused": {
+                      backgroundColor: "#ffffff",
+                      "& fieldset": {
+                        borderColor: "#667eea",
+                        borderWidth: "2px",
+                      },
+                    },
+                    "& fieldset": {
+                      borderColor: "#e2e8f0",
+                    },
+                  },
+                  "& .MuiOutlinedInput-input": {
+                    padding: "14px 16px",
+                  },
+                }}
+              />
+            </div>
+
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              disabled={isLoading}
+              sx={{
+                marginTop: "0.5rem",
+                padding: "14px",
+                borderRadius: "10px",
+                fontWeight: 600,
+                fontSize: "1rem",
+                textTransform: "none",
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                boxShadow: "0 4px 14px rgba(102, 126, 234, 0.4)",
+                transition: "all 0.3s",
+                "&:hover": {
+                  background:
+                    "linear-gradient(135deg, #5568d3 0%, #653a8a 100%)",
+                  boxShadow: "0 6px 20px rgba(102, 126, 234, 0.5)",
+                  transform: "translateY(-2px)",
+                },
+                "&:disabled": {
+                  background: "#cbd5e1",
+                  color: "#94a3b8",
+                  boxShadow: "none",
+                },
+              }}
+            >
+              {isLoading ? "로그인 중..." : "로그인"}
+            </Button>
+          </form>
         </div>
-        <form onSubmit={handleSubmit} className={st.form}>
-          <TextField
-            label="이메일"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            fullWidth
-            variant="outlined"
-          />
-          <TextField
-            label="비밀번호"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            fullWidth
-            variant="outlined"
-          />
-          <Button
-            type="submit"
-            variant="contained"
-            size="large"
-            disabled={isLoading}
-          >
-            {isLoading ? "로그인 중..." : "로그인"}
-          </Button>
-        </form>
+
+        <div className={st.illustration}>
+          <div className={st.illustrationContent}>
+            <h2>효율적인 팀 협업을 위한</h2>
+            <h2>올인원 플랫폼</h2>
+            <div className={st.features}>
+              <div className={st.feature}>
+                <ChatBubbleOutline className={st.featureIcon} />
+                <span>실시간 채팅</span>
+              </div>
+              <div className={st.feature}>
+                <FolderOutlined className={st.featureIcon} />
+                <span>파일 공유</span>
+              </div>
+              <div className={st.feature}>
+                <BarChartOutlined className={st.featureIcon} />
+                <span>프로젝트 관리</span>
+              </div>
+              <div className={st.feature}>
+                <GroupOutlined className={st.featureIcon} />
+                <span>팀 협업</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

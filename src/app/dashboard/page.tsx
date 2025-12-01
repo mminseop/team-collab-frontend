@@ -4,17 +4,19 @@ import st from "./dashboard.module.scss";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useChannels } from "@/hooks/useChannels";
-import { Channel, GroupedChannels } from "@/types/channel";
+import { Channel } from "@/types/channel";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 export default function DashboardPage() {
   const { data: user, isLoading: userLoading } = useUser();
-  const { data: channels = [], isLoading: channelsLoading } = useChannels();
+  const { data: channelsResponse, isLoading: channelsLoading } = useChannels();
 
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
     {}
   );
   const [activeChannel, setActiveChannel] = useState<string>("");
+
+  const channels: Channel[] = channelsResponse?.data ?? [];
 
   // 로딩 상태
   if (userLoading || channelsLoading) {
@@ -22,16 +24,14 @@ export default function DashboardPage() {
   }
 
   // 채널 부서별 그룹핑
-  const groupedChannels: GroupedChannels = channels.reduce(
-    (acc: GroupedChannels, channel: Channel) => {
+  const groupedChannels = channels.reduce(
+    (acc: Record<string, Channel[]>, channel: Channel) => {
       const key = channel.department_id ?? "전체";
-      if (!acc[key]) {
-        acc[key] = [];
-      }
+      if (!acc[key]) acc[key] = [];
       acc[key].push(channel);
       return acc;
     },
-    {} as GroupedChannels
+    {}
   );
 
   const toggleCategory = (category: string) => {

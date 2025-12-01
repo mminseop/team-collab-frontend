@@ -1,5 +1,5 @@
 "use client";
-import st from "./dashboard.module.scss";
+import st from "@/app/dashboard/dashboard.module.scss";
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useChannels } from "@/hooks/useChannels";

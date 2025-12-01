@@ -11,7 +11,7 @@ import {
   BarChartOutlined,
   GroupOutlined,
 } from "@mui/icons-material";
-import st from "./loginPage.module.scss"
+import st from "./loginPage.module.scss";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useLogin } from "@/hooks/useLogin";
 
@@ -54,14 +54,12 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className={st.form}>
             <div className={st.inputGroup}>
-              <label className={st.label}>이메일</label>
               <TextField
+                label="이메일"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 fullWidth
                 variant="outlined"
-                placeholder="이메일을 입력하세요"
-                required
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     borderRadius: "10px",
@@ -89,15 +87,13 @@ export default function LoginPage() {
             </div>
 
             <div className={st.inputGroup}>
-              <label className={st.label}>비밀번호</label>
               <TextField
+                label="비밀번호"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 fullWidth
                 variant="outlined"
-                placeholder="비밀번호를 입력하세요"
-                required
                 slotProps={{
                   input: {
                     endAdornment: (

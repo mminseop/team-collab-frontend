@@ -1,22 +1,26 @@
-'use client';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import QueryProvider from '@/providers/QueryProvider';
 
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-import React from 'react';
+const inter = Inter({ subsets: ['latin'] });
 
-const theme = createTheme({
-  palette: {
-    mode: 'light',
-  },
-});
+export const metadata: Metadata = {
+  title: 'TeamCollab',
+  description: '팀 협업 인트라넷',
+};
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ko">
-      <body>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
+      <body className={inter.className}>
+        <QueryProvider>
           {children}
-        </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );

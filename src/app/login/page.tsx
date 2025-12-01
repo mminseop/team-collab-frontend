@@ -12,29 +12,33 @@ import {
   GroupOutlined,
 } from "@mui/icons-material";
 import st from "./loginPage.module.scss";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { useLogin } from "@/hooks/useLogin";
 
 export default function LoginPage() {
   const router = useRouter();
+  const loginMutation = useLogin();
+  const { isLoading } = useAuthStore();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    setIsLoading(true);
-    try {
-      // 이메일/비밀번호 체크
-      if (email === "admin" && password === "admin") {
-        router.replace("/dashboard"); // 성공 > 대시보드 이동
-      } else {
-        alert("이메일 또는 비밀번호가 잘못되었습니다.");
+    loginMutation.mutate(
+      { email, password },
+      {
+        onSuccess: () => {
+          router.replace("/dashboard");
+        },
+        onError: () => {
+          // 일단 인터셉터에서 이미 alert 처리
+        },
       }
-    } finally {
-      setIsLoading(false);
-    }
-  }
+    );
+  };
 
   return (
     <div className={st.pageWrap}>
@@ -138,7 +142,7 @@ export default function LoginPage() {
               type="submit"
               variant="contained"
               size="large"
-              disabled={isLoading}
+              disabled={isLoading || loginMutation.isPending}
               sx={{
                 marginTop: "0.5rem",
                 padding: "14px",
@@ -162,7 +166,7 @@ export default function LoginPage() {
                 },
               }}
             >
-              {isLoading ? "로그인 중..." : "로그인"}
+              {isLoading || loginMutation.isPending ? "로그인 중..." : "로그인"}
             </Button>
           </form>
         </div>

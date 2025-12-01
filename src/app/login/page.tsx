@@ -11,7 +11,7 @@ import {
   BarChartOutlined,
   GroupOutlined,
 } from "@mui/icons-material";
-import st from "@/app/login/loginPage.module.scss"
+import st from "./loginPage.module.scss"
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useLogin } from "@/hooks/useLogin";
 

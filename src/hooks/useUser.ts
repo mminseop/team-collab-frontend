@@ -1,17 +1,19 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { api } from '@/lib/api';
+import { api } from "@/lib/api";
+
+interface User {
+  id: number;
+  email: string;
+  name: string;
+  role: "ADMIN" | "MEMBER";
+  departmentId: number | null;
+}
 
 interface UserResponse {
   success: boolean;
-  user: {
-    id: number;
-    email: string;
-    name: string;
-    role: "ADMIN" | "MEMBER";
-    departmentId: number | null;
-  };
+  user: User;
 }
 
 export function useUser() {

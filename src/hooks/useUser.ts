@@ -1,21 +1,23 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiClient } from "@/lib/api";
-import { useAuthStore } from "@/stores/useAuthStore";
+import { api } from '@/lib/api';
 
-interface User {
-  id: number;
-  email: string;
-  name: string;
-  role: "ADMIN" | "MEMBER";
-  departmentId: number | null;
+interface UserResponse {
+  success: boolean;
+  user: {
+    id: number;
+    email: string;
+    name: string;
+    role: "ADMIN" | "MEMBER";
+    departmentId: number | null;
+  };
 }
 
 export function useUser() {
-  return useQuery<User>({
+  return useQuery<UserResponse>({
     queryKey: ["user"],
-    queryFn: () => apiClient.get("/api/auth/me").then((res) => res.data.user),
-    enabled: !!useAuthStore((state) => state.user),
+    queryFn: () => api.get<UserResponse>("/api/auth/me"),
+    staleTime: 5 * 60 * 1000,
   });
 }

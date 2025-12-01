@@ -6,27 +6,36 @@ import { useUser } from "@/hooks/useUser";
 import { useChannels } from "@/hooks/useChannels";
 import { Channel } from "@/types/channel";
 import SettingsIcon from "@mui/icons-material/Settings";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 
 export default function DashboardPage() {
-  const { data: user, isLoading: userLoading } = useUser();
+  const { data: userResponse, isLoading: userLoading } = useUser();
   const { data: channelsResponse, isLoading: channelsLoading } = useChannels();
 
+  const user = userResponse?.user;
+  const channels: Channel[] = channelsResponse?.data ?? [];
+
+  // 아코디언 열려있는 카테고리 상태
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
     {}
   );
+
+  // 선택된 채널 상태
   const [activeChannel, setActiveChannel] = useState<string>("");
 
-  const channels: Channel[] = channelsResponse?.data ?? [];
-
-  // 로딩 상태
   if (userLoading || channelsLoading) {
     return <div className={st.loading}>로딩중...</div>;
   }
 
-  // 채널 부서별 그룹핑
-  const groupedChannels = channels.reduce(
+  // -----------------------------
+  // 부서별로 채널 배열을 그룹핑하는 로직
+  // 예) { "프론트엔드팀": [채널1, 채널5], "백엔드팀": [채널2, 채널6] ... }
+  // department_display_name 없으면 "전체 채널" 키로 저장
+  // -----------------------------
+  const groupedChannels: Record<string, Channel[]> = channels.reduce(
     (acc: Record<string, Channel[]>, channel: Channel) => {
-      const key = channel.department_id ?? "전체";
+      const key = channel.department_display_name ?? "전체 채널";
       if (!acc[key]) acc[key] = [];
       acc[key].push(channel);
       return acc;
@@ -34,6 +43,7 @@ export default function DashboardPage() {
     {}
   );
 
+  // 카테고리 (부서) 열림/닫힘 토글 핸들러
   const toggleCategory = (category: string) => {
     setOpenCategories((prev) => ({
       ...prev,
@@ -43,33 +53,34 @@ export default function DashboardPage() {
 
   return (
     <div className={st.container}>
+      {/* 사이드바 */}
       <aside className={st.sidebar}>
         <div className={st.serverHeader}>TeamCollab</div>
 
         <div className={st.channelList}>
-          {Object.entries(groupedChannels).map(([deptKey, deptChannels]) => (
-            <div key={deptKey} className={st.channelCategory}>
+          {Object.entries(groupedChannels).map(([deptName, deptChannels]) => (
+            <div key={deptName} className={st.channelCategory}>
               <div
                 className={st.categoryHeader}
-                onClick={() => toggleCategory(deptKey)}
+                onClick={() => toggleCategory(deptName)}
               >
-                <span
-                  className={`${st.arrow} ${
-                    openCategories[deptKey] ?? false ? st.open : ""
-                  }`}
-                >
-                  ▶
+                {/* MUI 화살표 아이콘 */}
+                <span className={st.arrow}>
+                  {openCategories[deptName] ? (
+                    <ArrowDropDownIcon fontSize="small" />
+                  ) : (
+                    <ArrowRightIcon fontSize="small" />
+                  )}
                 </span>
-                <span className={st.categoryTitle}>
-                  {deptKey === "전체" ? "전체 채널" : `${deptKey} 부서`}
-                </span>
+                {/* 부서 이름 표시 */}
+                <span className={st.categoryTitle}>{deptName}</span>
               </div>
               <div
                 className={`${st.categoryChannels} ${
-                  openCategories[deptKey] ?? false ? st.open : ""
+                  openCategories[deptName] ? st.open : ""
                 }`}
               >
-                {deptChannels.map((channel: Channel) => (
+                {deptChannels.map((channel) => (
                   <div
                     key={channel.id}
                     className={`${st.channelItem} ${
@@ -87,6 +98,7 @@ export default function DashboardPage() {
           ))}
         </div>
 
+        {/* 유저 정보 섹션 */}
         <div className={st.userSection}>
           <div className={st.userAvatar}>{user?.name?.[0] || "U"}</div>
           <div className={st.userInfo}>
@@ -97,6 +109,7 @@ export default function DashboardPage() {
         </div>
       </aside>
 
+      {/* 메인 콘텐츠 */}
       <main className={st.mainContent}>
         <div className={st.topBar}>
           <div className={st.channelInfo}>

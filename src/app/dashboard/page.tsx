@@ -1,7 +1,7 @@
 "use client";
 
 import st from "./dashboard.module.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "@/hooks/useUser";
 import { useChannels } from "@/hooks/useChannels";
 import { Channel } from "@/types/channel";
@@ -12,7 +12,11 @@ import { SettingsDialog } from "@/components/common/SettingsDialog";
 import { useLogout } from "@/hooks/useLogout";
 
 export default function DashboardPage() {
-  const { data: userResponse, isLoading: userLoading } = useUser();
+  const {
+    data: userResponse,
+    isLoading: userLoading,
+    error: userError,
+  } = useUser();
   const { data: channelsResponse, isLoading: channelsLoading } = useChannels();
   const logoutMutation = useLogout();
 
@@ -29,8 +33,23 @@ export default function DashboardPage() {
   // 선택된 채널 상태
   const [activeChannel, setActiveChannel] = useState<string>("");
 
+  // 보호 라우팅: user 없거나 에러 시 로그인 페이지로
+  useEffect(() => {
+    // 로그아웃 중이거나 에러 있거나, 로딩 끝나고 user 없으면 리다이렉트
+    if (logoutMutation.isPending || userError || (!userLoading && !user)) {
+      window.location.href = "/";
+    }
+  }, [userError, userLoading, user, logoutMutation.isPending]);
+
+  // 로딩 중
   if (userLoading || channelsLoading) {
     return <div className={st.loading}>로딩중...</div>;
+  }
+
+  // user 없음 (이 시점에서 확실히 인증 실패)
+  if (!user) {
+    window.location.href = "/";
+    return null;
   }
 
   // -----------------------------
@@ -57,7 +76,7 @@ export default function DashboardPage() {
   };
 
   const handleLogout = () => {
-     logoutMutation.mutate();
+    logoutMutation.mutate();
   };
 
   return (

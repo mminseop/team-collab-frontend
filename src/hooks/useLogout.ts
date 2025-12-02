@@ -9,13 +9,7 @@ export function useLogout() {
   return useMutation({
     mutationFn: () => api.post("/api/auth/logout"),
     onSuccess: () => {
-      // 1. user 쿼리 무효화 (자동으로 loading 상태로 변경)
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-      
-      // 2. 다른 인증 관련 쿼리들도 필요시 무효화
-      queryClient.invalidateQueries({ queryKey: ["channels"] });
-      
-      // 3. 로그인 페이지로 리다이렉트
+      queryClient.clear(); // 모든 캐시 제거
       router.push("/");
     },
     onError: () => {

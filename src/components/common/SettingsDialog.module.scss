@@ -1,0 +1,528 @@
+// SettingsDialog.module.scss
+
+.dialogPaper {
+  background: transparent !important;
+  box-shadow: none !important;
+  max-width: 1000px !important;
+  width: 90vw !important;
+  height: 85vh !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+.settingsContainer {
+  display: flex;
+  height: 85vh;
+  background: #36393f;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+// ============ 사이드바 ============
+.sidebar {
+  width: 240px;
+  background: #2f3136;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #202225;
+}
+
+.sidebarContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 60px 8px 20px 8px;
+}
+
+.menuList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #b9bbbe;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+
+  &:hover {
+    background: #393c43;
+    color: #dcddde;
+  }
+
+  &.active {
+    background: #404249;
+    color: #fff;
+  }
+}
+
+.menuIcon {
+  display: flex;
+  align-items: center;
+  color: inherit;
+}
+
+.menuLabel {
+  flex: 1;
+}
+
+.sidebarFooter {
+  border-top: 1px solid #202225;
+  padding-top: 16px;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: #ed4245;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background: #ed424515;
+  }
+}
+
+// ============ 콘텐츠 영역 ============
+.content {
+  flex: 1;
+  background: #36393f;
+  overflow-y: auto;
+  position: relative;
+  padding: 60px 40px 80px 40px;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-radius: 4px;
+
+    &:hover {
+      background: #2f3136;
+    }
+  }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 2px solid #4e5058;
+  border-radius: 50%;
+  color: #b9bbbe;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  z-index: 10;
+
+  &:hover {
+    background: #ed4245;
+    border-color: #ed4245;
+    color: #fff;
+    transform: rotate(90deg);
+  }
+}
+
+.contentSection {
+  max-width: 740px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 4px 0;
+  }
+
+  p {
+    font-size: 14px;
+    color: #b9bbbe;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+// ============ 폼 요소 ============
+.formGroup {
+  margin-bottom: 24px;
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #b9bbbe;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  input,
+  select {
+    width: 100%;
+    padding: 10px 12px;
+    background: #202225;
+    border: 1px solid #202225;
+    border-radius: 4px;
+    color: #dcddde;
+    font-size: 15px;
+    transition: border-color 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #5865f2;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &::placeholder {
+      color: #4e5058;
+    }
+  }
+
+  input + input {
+    margin-top: 16px;
+  }
+}
+
+.avatarUpload {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.avatarPreview {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #5865f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.uploadBtn {
+  padding: 8px 16px;
+  background: #4e5058;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #5865f2;
+  }
+}
+
+.saveBtn {
+  padding: 10px 16px;
+  background: #5865f2;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  margin-top: 16px;
+  &:hover {
+    background: #4752c4;
+  }
+
+  &:disabled {
+    background: #4e5058;
+    cursor: not-allowed;
+  }
+}
+
+// ============ 설정 아이템 (토글 스위치) ============
+.settingItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0;
+  border-bottom: 1px solid #4e5058;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.settingInfo {
+  flex: 1;
+  padding-right: 20px;
+}
+
+// 토글 스위치
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+
+    &:checked + .slider {
+      background: #5865f2;
+    }
+
+    &:checked + .slider:before {
+      transform: translateX(20px);
+    }
+  }
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #4e5058;
+  transition: 0.2s;
+  border-radius: 34px;
+
+  &:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    transition: 0.2s;
+    border-radius: 50%;
+  }
+}
+
+.actionBtn {
+  padding: 8px 16px;
+  background: #4e5058;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #5865f2;
+  }
+}
+
+.select {
+  min-width: 200px;
+}
+
+// ============ 테마 설정 ============
+.themeOptions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.themeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #2f3136;
+  border: 2px solid #2f3136;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: #5865f2;
+  }
+
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #dcddde;
+  }
+}
+
+.themePreview {
+  width: 100%;
+  height: 80px;
+  border-radius: 6px;
+
+  &.dark {
+    background: linear-gradient(135deg, #202225 0%, #2f3136 100%);
+  }
+
+  &.light {
+    background: linear-gradient(135deg, #ffffff 0%, #f2f3f5 100%);
+  }
+
+  &.auto {
+    background: linear-gradient(
+      135deg,
+      #202225 0%,
+      #202225 50%,
+      #ffffff 50%,
+      #ffffff 100%
+    );
+  }
+}
+
+// ============ 통합 관리 ============
+.integrationCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #2f3136;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: background 0.15s ease;
+
+  &:hover {
+    background: #35383f;
+  }
+}
+
+.integrationHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.integrationIcon {
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.integrationsList {
+  display: flex;
+  flex-direction: column;
+}
+
+.connectBtn {
+  padding: 8px 20px;
+  background: #5865f2;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: #4752c4;
+  }
+
+  &.connected {
+    background: #3ba55d;
+
+    &:hover {
+      background: #2d7d46;
+    }
+  }
+}
+
+// ============ 반응형 ============
+@media (max-width: 768px) {
+  .settingsContainer {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #202225;
+  }
+
+  .sidebarContent {
+    padding: 20px 12px;
+  }
+
+  .menuList {
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 8px;
+  }
+
+  .menuItem {
+    flex-direction: column;
+    min-width: 80px;
+    text-align: center;
+    padding: 12px 8px;
+  }
+
+  .menuLabel {
+    font-size: 12px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .themeOptions {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,6 +8,7 @@ import { Channel } from "@/types/channel";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import { SettingsDialog } from "@/components/common/SettingsDialog";
 
 export default function DashboardPage() {
   const { data: userResponse, isLoading: userLoading } = useUser();
@@ -15,6 +16,8 @@ export default function DashboardPage() {
 
   const user = userResponse?.user;
   const channels: Channel[] = channelsResponse?.data ?? [];
+
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   // 아코디언 열려있는 카테고리 상태
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(
@@ -49,6 +52,10 @@ export default function DashboardPage() {
       ...prev,
       [category]: !(prev[category] ?? false),
     }));
+  };
+
+  const handleLogout = () => {
+    // TODO: 로그아웃 API 호출 + 라우팅
   };
 
   return (
@@ -105,7 +112,10 @@ export default function DashboardPage() {
             <div className={st.userName}>{user?.name || "로딩중..."}</div>
             <div className={st.userStatus}>온라인</div>
           </div>
-          <SettingsIcon className={st.settingsIcon} />
+          <SettingsIcon
+            className={st.settingsIcon}
+            onClick={() => setIsSettingsOpen(true)}
+          />
         </div>
       </aside>
 
@@ -131,6 +141,13 @@ export default function DashboardPage() {
           </div>
         </div>
       </main>
+
+      {/* 설정 모달 공통 컴포넌트 */}
+      <SettingsDialog
+        open={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        onLogout={handleLogout}
+      />
     </div>
   );
 }

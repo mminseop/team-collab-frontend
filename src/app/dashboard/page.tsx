@@ -84,7 +84,6 @@ export default function DashboardPage() {
       {/* 사이드바 */}
       <aside className={st.sidebar}>
         <div className={st.serverHeader}>TeamCollab</div>
-
         <div className={st.channelList}>
           {Object.entries(groupedChannels).map(([deptName, deptChannels]) => (
             <div key={deptName} className={st.channelCategory}>
@@ -168,6 +167,7 @@ export default function DashboardPage() {
         open={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
         onLogout={handleLogout}
+        userRole={user?.role}
       />
     </div>
   );

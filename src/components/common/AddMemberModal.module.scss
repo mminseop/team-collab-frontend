@@ -1,0 +1,17 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+// 반응형
+@media (max-width: 768px) {
+  .formContainer {
+    gap: 16px;
+  }
+}

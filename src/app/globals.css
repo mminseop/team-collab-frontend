@@ -35,6 +35,312 @@ a {
   text-decoration: none;
 }
 
+/* ========================================
+   Discord 스타일 MUI 컴포넌트 전역 스타일
+   ======================================== */
+
+/* MUI Select 드롭다운 메뉴 */
+.MuiMenu-paper {
+  background: #2f3136 !important;
+  border: 1px solid #202225 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4) !important;
+  margin-top: 4px !important;
+}
+
+.MuiMenuItem-root {
+  color: #dcddde !important;
+  font-size: 15px !important;
+  padding: 10px 12px !important;
+  transition: background 0.15s ease !important;
+}
+
+.MuiMenuItem-root:hover {
+  background: #393c43 !important;
+}
+
+.MuiMenuItem-root.Mui-selected {
+  background: #404249 !important;
+}
+
+.MuiMenuItem-root.Mui-selected:hover {
+  background: #404249 !important;
+}
+
+.MuiMenuItem-root.Mui-focusVisible {
+  background: #393c43 !important;
+}
+
+.MuiMenu-list {
+  padding: 4px 0 !important;
+}
+
+/* MUI TextField 전역 스타일 */
+.MuiInputLabel-root {
+  color: #b9bbbe !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: #5865f2 !important;
+}
+
+.MuiInputLabel-root.Mui-error {
+  color: #ed4245 !important;
+}
+
+.MuiOutlinedInput-root {
+  background: #202225 !important;
+  color: #dcddde !important;
+  font-size: 15px !important;
+  border-radius: 4px !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: #202225 !important;
+  transition: border-color 0.15s ease !important;
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #202225 !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #5865f2 !important;
+  border-width: 1px !important;
+}
+
+.MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: #ed4245 !important;
+}
+
+.MuiOutlinedInput-root.Mui-disabled {
+  background: #202225 !important;
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.MuiOutlinedInput-input {
+  color: #dcddde !important;
+  padding: 10px 12px !important;
+}
+
+.MuiOutlinedInput-input::placeholder {
+  color: #4e5058 !important;
+  opacity: 1 !important;
+}
+
+.MuiOutlinedInput-input:disabled {
+  -webkit-text-fill-color: #72767d !important;
+}
+
+.MuiSelect-select {
+  color: #dcddde !important;
+}
+
+.MuiSelect-icon {
+  color: #b9bbbe !important;
+}
+
+.MuiFormHelperText-root {
+  color: #b9bbbe !important;
+  font-size: 12px !important;
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+}
+
+.MuiFormHelperText-root.Mui-error {
+  color: #ed4245 !important;
+}
+
+.MuiIconButton-root {
+  color: #b9bbbe !important;
+}
+
+.MuiIconButton-root:hover {
+  background: rgba(79, 80, 88, 0.3) !important;
+  color: #dcddde !important;
+}
+
+/* ========================================
+   Discord 스타일 MUI 컴포넌트 전역 스타일
+   ======================================== */
+
+/* MUI Select 드롭다운 메뉴 */
+.MuiMenu-paper {
+  background: #2f3136 !important;
+  border: 1px solid #202225 !important;
+  border-radius: 4px !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4) !important;
+  margin-top: 4px !important;
+}
+
+.MuiMenuItem-root {
+  color: #dcddde !important;
+  font-size: 15px !important;
+  padding: 10px 12px !important;
+  transition: background 0.15s ease !important;
+}
+
+.MuiMenuItem-root:hover {
+  background: #393c43 !important;
+}
+
+.MuiMenuItem-root.Mui-selected {
+  background: #404249 !important;
+}
+
+.MuiMenuItem-root.Mui-selected:hover {
+  background: #404249 !important;
+}
+
+.MuiMenuItem-root.Mui-focusVisible {
+  background: #393c43 !important;
+}
+
+.MuiMenu-list {
+  padding: 4px 0 !important;
+}
+
+/* MUI TextField 전역 스타일 */
+.MuiInputLabel-root {
+  color: #b9bbbe !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  color: #5865f2 !important;
+}
+
+.MuiInputLabel-root.Mui-error {
+  color: #ed4245 !important;
+}
+
+.MuiOutlinedInput-root {
+  background: #202225 !important;
+  color: #dcddde !important;
+  font-size: 15px !important;
+  border-radius: 4px !important;
+}
+
+.MuiOutlinedInput-notchedOutline {
+  border-color: #202225 !important;
+  transition: border-color 0.15s ease !important;
+}
+
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #202225 !important;
+}
+
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #5865f2 !important;
+  border-width: 1px !important;
+}
+
+.MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: #ed4245 !important;
+}
+
+.MuiOutlinedInput-root.Mui-disabled {
+  background: #202225 !important;
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.MuiOutlinedInput-input {
+  color: #dcddde !important;
+  padding: 10px 12px !important;
+}
+
+.MuiOutlinedInput-input::placeholder {
+  color: #4e5058 !important;
+  opacity: 1 !important;
+}
+
+.MuiOutlinedInput-input:disabled {
+  -webkit-text-fill-color: #72767d !important;
+}
+
+.MuiSelect-select {
+  color: #dcddde !important;
+}
+
+.MuiSelect-icon {
+  color: #b9bbbe !important;
+}
+
+.MuiFormHelperText-root {
+  color: #b9bbbe !important;
+  font-size: 12px !important;
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+}
+
+.MuiFormHelperText-root.Mui-error {
+  color: #ed4245 !important;
+}
+
+.MuiIconButton-root {
+  color: #b9bbbe !important;
+}
+
+.MuiIconButton-root:hover {
+  background: rgba(79, 80, 88, 0.3) !important;
+  color: #dcddde !important;
+}
+
+/* MUI Dialog 버튼 스타일 */
+.MuiDialogActions-root .MuiButton-root {
+  border-radius: 4px !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  font-size: 14px !important;
+  padding: 10px 16px !important;
+  min-width: 80px !important;
+  transition: all 0.15s ease !important;
+  box-shadow: none !important;
+}
+
+/* 취소 버튼 (첫 번째 버튼) */
+.MuiDialogActions-root .MuiButton-root:first-of-type {
+  color: #dcddde !important;
+  background: #4e5058 !important;
+}
+
+.MuiDialogActions-root .MuiButton-root:first-of-type:hover {
+  background: #5d6169 !important;
+}
+
+.MuiDialogActions-root .MuiButton-root:first-of-type:disabled {
+  background: #3a3d42 !important;
+  color: #72767d !important;
+  cursor: not-allowed !important;
+}
+
+/* 확인/저장 버튼 (contained variant) */
+.MuiDialogActions-root .MuiButton-contained {
+  background-color: #5865f2 !important;
+  color: #fff !important;
+}
+
+.MuiDialogActions-root .MuiButton-contained:hover {
+  background-color: #4752c4 !important;
+  box-shadow: 0 2px 8px rgba(88, 101, 242, 0.3) !important;
+}
+
+.MuiDialogActions-root .MuiButton-contained:disabled {
+  background-color: #4e5058 !important;
+  color: #72767d !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;

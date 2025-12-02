@@ -1,0 +1,47 @@
+.dialogPaper {
+  background: #36393f !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  color: #dcddde;
+}
+
+.dialogTitle {
+  font-weight: 600;
+  font-size: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid #202225;
+  color: #fff !important;
+  background: #2f3136;
+  letter-spacing: 0.5px;
+}
+
+.dialogContent {
+  padding: 24px !important;
+  background: #36393f;
+  border-top: 1px solid #202225 !important;
+  border-bottom: 1px solid #202225 !important;
+  
+  // 스크롤바 스타일링
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-radius: 4px;
+
+    &:hover {
+      background: #2f3136;
+    }
+  }
+}
+
+.dialogActions {
+  padding: 16px 24px !important;
+  background: #2f3136;
+  gap: 12px;
+}

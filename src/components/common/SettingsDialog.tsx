@@ -15,11 +15,17 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import EmailIcon from "@mui/icons-material/Email";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import ArticleIcon from "@mui/icons-material/Article";
+// 추가된 아이콘들
+import PeopleIcon from "@mui/icons-material/People";
+import TagIcon from "@mui/icons-material/Tag";
+import BusinessIcon from "@mui/icons-material/Business";
+import { AddMemberModal } from "./AddMemberModal";
 
 type SettingsDialogProps = {
   open: boolean;
   onClose: () => void;
   onLogout: () => void;
+  userRole?: string; // 추가: 사용자 권한
 };
 
 type MenuKey =
@@ -29,16 +35,37 @@ type MenuKey =
   | "appearance"
   | "language"
   | "slackbot"
-  | "integrations";
+  | "integrations"
+  | "members"
+  | "channels"
+  | "departments";
+
+type AddMemberData = {
+  email: string;
+  name: string;
+  departmentId: string;
+  role: string;
+};
 
 export function SettingsDialog({
   open,
   onClose,
   onLogout,
+  userRole, // props에서 받기
 }: SettingsDialogProps) {
   const [activeMenu, setActiveMenu] = useState<MenuKey>("account");
+  const isAdmin = userRole === "ADMIN";
 
-  const menuItems = [
+  const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+
+  const handleAddMember = (data: AddMemberData) => {
+    console.log("팀원 추가 요청 데이터:", data);
+    // 완료 후 모달 닫기 등 처리
+    setIsAddMemberOpen(false);
+  };
+
+  // 일반 메뉴
+  const commonMenuItems = [
     { key: "account" as MenuKey, label: "내 계정", icon: <PersonIcon /> },
     {
       key: "notifications" as MenuKey,
@@ -50,11 +77,7 @@ export function SettingsDialog({
       label: "개인정보 및 보안",
       icon: <SecurityIcon />,
     },
-    {
-      key: "appearance" as MenuKey,
-      label: "테마 설정",
-      icon: <PaletteIcon />,
-    },
+    { key: "appearance" as MenuKey, label: "테마 설정", icon: <PaletteIcon /> },
     { key: "language" as MenuKey, label: "언어", icon: <LanguageIcon /> },
     {
       key: "slackbot" as MenuKey,
@@ -65,6 +88,17 @@ export function SettingsDialog({
       key: "integrations" as MenuKey,
       label: "통합 관리",
       icon: <IntegrationInstructionsIcon />,
+    },
+  ];
+
+  // 관리자 전용 메뉴
+  const adminMenuItems = [
+    { key: "members" as MenuKey, label: "팀원 관리", icon: <PeopleIcon /> },
+    { key: "channels" as MenuKey, label: "채널 관리", icon: <TagIcon /> },
+    {
+      key: "departments" as MenuKey,
+      label: "부서 관리",
+      icon: <BusinessIcon />,
     },
   ];
 
@@ -294,6 +328,67 @@ export function SettingsDialog({
           </div>
         );
 
+      // 관리자 전용 메뉴들
+      case "members":
+        return (
+          <>
+            <div className={st.contentSection}>
+              <h2>팀원 관리</h2>
+              <div className={st.adminHeader}>
+                <button
+                  className={st.addBtn}
+                  onClick={() => setIsAddMemberOpen(true)}
+                >
+                  <PeopleIcon fontSize="small" />
+                  팀원 초대
+                </button>
+              </div>
+              <div className={st.membersList}>
+                <p className={st.placeholder}>팀원 목록이 여기에 표시됩니다.</p>
+              </div>
+            </div>
+
+            <AddMemberModal
+              open={isAddMemberOpen}
+              onClose={() => setIsAddMemberOpen(false)}
+              onAddMember={handleAddMember}
+              departments={[]}
+            />
+          </>
+        );
+
+      case "channels":
+        return (
+          <div className={st.contentSection}>
+            <h2>채널 관리</h2>
+            <div className={st.adminHeader}>
+              <button className={st.addBtn}>
+                <TagIcon fontSize="small" />
+                채널 추가
+              </button>
+            </div>
+            <div className={st.channelsList}>
+              <p className={st.placeholder}>채널 목록이 여기에 표시됩니다.</p>
+            </div>
+          </div>
+        );
+
+      case "departments":
+        return (
+          <div className={st.contentSection}>
+            <h2>부서 관리</h2>
+            <div className={st.adminHeader}>
+              <button className={st.addBtn}>
+                <BusinessIcon fontSize="small" />
+                부서 추가
+              </button>
+            </div>
+            <div className={st.departmentsList}>
+              <p className={st.placeholder}>부서 목록이 여기에 표시됩니다.</p>
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -304,16 +399,34 @@ export function SettingsDialog({
       open={open}
       onClose={onClose}
       maxWidth={false}
-      PaperProps={{
-        className: st.dialogPaper,
-      }}
+      PaperProps={{ className: st.dialogPaper }}
     >
       <div className={st.settingsContainer}>
-        {/* 사이드바 */}
         <div className={st.sidebar}>
           <div className={st.sidebarContent}>
             <nav className={st.menuList}>
-              {menuItems.map((item) => (
+              {/* 관리자 메뉴 섹션 */}
+              {isAdmin && (
+                <>
+                  <div className={st.menuSectionTitle}>관리자 메뉴</div>
+                  {adminMenuItems.map((item) => (
+                    <button
+                      key={item.key}
+                      className={`${st.menuItem} ${
+                        activeMenu === item.key ? st.active : ""
+                      }`}
+                      onClick={() => setActiveMenu(item.key)}
+                    >
+                      <span className={st.menuIcon}>{item.icon}</span>
+                      <span className={st.menuLabel}>{item.label}</span>
+                    </button>
+                  ))}
+                  <div className={st.menuSectionDivider} />
+                </>
+              )}
+
+              {/* 일반 메뉴 섹션 */}
+              {commonMenuItems.map((item) => (
                 <button
                   key={item.key}
                   className={`${st.menuItem} ${
@@ -335,7 +448,6 @@ export function SettingsDialog({
           </div>
         </div>
 
-        {/* 콘텐츠 영역 */}
         <div className={st.content}>
           <button className={st.closeBtn} onClick={onClose}>
             <CloseIcon />

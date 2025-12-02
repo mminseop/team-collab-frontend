@@ -9,10 +9,12 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { SettingsDialog } from "@/components/common/SettingsDialog";
+import { useLogout } from "@/hooks/useLogout";
 
 export default function DashboardPage() {
   const { data: userResponse, isLoading: userLoading } = useUser();
   const { data: channelsResponse, isLoading: channelsLoading } = useChannels();
+  const logoutMutation = useLogout();
 
   const user = userResponse?.user;
   const channels: Channel[] = channelsResponse?.data ?? [];
@@ -55,7 +57,7 @@ export default function DashboardPage() {
   };
 
   const handleLogout = () => {
-    // TODO: 로그아웃 API 호출 + 라우팅
+     logoutMutation.mutate();
   };
 
   return (

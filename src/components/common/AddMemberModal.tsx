@@ -9,23 +9,23 @@ import st from "./AddMemberModal.module.scss";
 type AddMemberModalProps = {
   open: boolean;
   onClose: () => void;
-  onAddMember: (data: { 
-    email: string; 
-    name: string; 
-    password: string; 
-    departmentId: string; 
-    role: string 
+  onAddMember: (data: {
+    email: string;
+    name: string;
+    password: string;
+    departmentId: string;
+    role: string;
   }) => void;
   departments: { id: number; name: string }[];
   isLoading?: boolean;
 };
 
-export function AddMemberModal({ 
-  open, 
-  onClose, 
-  onAddMember, 
-  departments, 
-  isLoading = false 
+export function AddMemberModal({
+  open,
+  onClose,
+  onAddMember,
+  departments,
+  isLoading = false,
 }: AddMemberModalProps) {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -58,34 +58,36 @@ export function AddMemberModal({
   };
 
   return (
-    <ModalWrapper 
-      open={open} 
-      onClose={handleClose} 
-      title="팀원 추가" 
-      onSubmit={handleSubmit} 
+    <ModalWrapper
+      open={open}
+      onClose={handleClose}
+      title="팀원 추가"
+      onSubmit={handleSubmit}
       isSubmitting={isLoading}
       submitText="팀원 초대"
     >
       <div className={st.formContainer}>
         <div className={st.formGroup}>
-          <TextField 
-            label="이메일" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)} 
-            fullWidth 
-            required 
+          <TextField
+            id="email-field"
+            label="이메일"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            fullWidth
+            required
             type="email"
             placeholder="email@example.com"
             className={st.discordInput}
           />
         </div>
-        
+
         <div className={st.formGroup}>
-          <TextField 
-            label="이름" 
-            value={name} 
-            onChange={(e) => setName(e.target.value)} 
-            fullWidth 
+          <TextField
+            id="name-field"
+            label="이름"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            fullWidth
             required
             placeholder="이름을 입력하세요"
             className={st.discordInput}
@@ -93,12 +95,13 @@ export function AddMemberModal({
         </div>
 
         <div className={st.formGroup}>
-          <TextField 
-            label="비밀번호" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            fullWidth 
-            required 
+          <TextField
+            id="password-field"
+            label="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            fullWidth
+            required
             type={showPassword ? "text" : "password"}
             placeholder="8자 이상 입력하세요"
             className={st.discordInput}
@@ -119,18 +122,19 @@ export function AddMemberModal({
         </div>
 
         <div className={st.formGroup}>
-          <TextField 
-            label="비밀번호 확인" 
-            value={confirmPassword} 
-            onChange={(e) => setConfirmPassword(e.target.value)} 
-            fullWidth 
-            required 
+          <TextField
+            id="password-re-field"
+            label="비밀번호 확인"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            fullWidth
+            required
             type={showConfirmPassword ? "text" : "password"}
             placeholder="비밀번호를 다시 입력하세요"
             error={confirmPassword !== "" && password !== confirmPassword}
             helperText={
-              confirmPassword !== "" && password !== confirmPassword 
-                ? "비밀번호가 일치하지 않습니다" 
+              confirmPassword !== "" && password !== confirmPassword
+                ? "비밀번호가 일치하지 않습니다"
                 : ""
             }
             className={st.discordInput}

@@ -55,6 +55,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className={st.form}>
             <div className={st.inputGroup}>
               <TextField
+                id="email-field"
                 label="이메일"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -88,6 +89,7 @@ export default function LoginPage() {
 
             <div className={st.inputGroup}>
               <TextField
+                id="password-field"
                 label="비밀번호"
                 type={showPassword ? "text" : "password"}
                 value={password}

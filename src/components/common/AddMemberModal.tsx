@@ -5,6 +5,7 @@ import { TextField, MenuItem, IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { ModalWrapper } from "./ModalWrapper";
 import st from "./AddMemberModal.module.scss";
+import { Department } from "@/hooks/useDepartments";
 
 type AddMemberModalProps = {
   open: boolean;
@@ -16,7 +17,7 @@ type AddMemberModalProps = {
     departmentId: string;
     role: string;
   }) => void;
-  departments: { id: number; name: string }[];
+  departments: Department[];
   isLoading?: boolean;
 };
 
@@ -167,7 +168,7 @@ export function AddMemberModal({
             <MenuItem value="">부서를 선택하세요</MenuItem>
             {departments.map((dept) => (
               <MenuItem key={dept.id} value={dept.id.toString()}>
-                {dept.name}
+                {dept.display_name || dept.name}{" "}
               </MenuItem>
             ))}
           </TextField>

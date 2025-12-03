@@ -20,6 +20,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import TagIcon from "@mui/icons-material/Tag";
 import BusinessIcon from "@mui/icons-material/Business";
 import { AddMemberModal } from "./AddMemberModal";
+import { Department, useDepartments } from "@/hooks/useDepartments";
 
 type SettingsDialogProps = {
   open: boolean;
@@ -57,6 +58,10 @@ export function SettingsDialog({
   const isAdmin = userRole === "ADMIN";
 
   const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+
+  // departments 훅
+  const { data: departmentsResponse } = useDepartments();
+  const departments: Department[] = departmentsResponse?.data ?? [];
 
   const handleAddMember = (data: AddMemberData) => {
     console.log("팀원 추가 요청 데이터:", data);
@@ -352,7 +357,7 @@ export function SettingsDialog({
               open={isAddMemberOpen}
               onClose={() => setIsAddMemberOpen(false)}
               onAddMember={handleAddMember}
-              departments={[]}
+              departments={departments}
             />
           </>
         );

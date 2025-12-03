@@ -15,12 +15,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import EmailIcon from "@mui/icons-material/Email";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import ArticleIcon from "@mui/icons-material/Article";
-// 추가된 아이콘들
 import PeopleIcon from "@mui/icons-material/People";
 import TagIcon from "@mui/icons-material/Tag";
 import BusinessIcon from "@mui/icons-material/Business";
 import { AddMemberModal } from "./AddMemberModal";
 import { Department, useDepartments } from "@/hooks/useDepartments";
+import { useAddUser } from "@/hooks/useAddUser";
 
 type SettingsDialogProps = {
   open: boolean;
@@ -44,6 +44,7 @@ type MenuKey =
 type AddMemberData = {
   email: string;
   name: string;
+  password: string;
   departmentId: string;
   role: string;
 };
@@ -63,10 +64,21 @@ export function SettingsDialog({
   const { data: departmentsResponse } = useDepartments();
   const departments: Department[] = departmentsResponse?.data ?? [];
 
+  // 팀원 추가 mutation
+  const addUserMutation = useAddUser();
+
   const handleAddMember = (data: AddMemberData) => {
-    console.log("팀원 추가 요청 데이터:", data);
-    // 완료 후 모달 닫기 등 처리
-    setIsAddMemberOpen(false);
+    addUserMutation.mutate(data, {
+      onSuccess: () => {
+        alert("팀원이 성공적으로 추가되었습니다!");
+        setIsAddMemberOpen(false);
+      },
+      onError: (error) => {
+        const errorMessage =
+          error || "팀원 추가에 실패했습니다.";
+        alert(errorMessage);
+      },
+    });
   };
 
   // 일반 메뉴

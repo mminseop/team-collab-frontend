@@ -26,7 +26,7 @@ type SettingsDialogProps = {
   open: boolean;
   onClose: () => void;
   onLogout: () => void;
-  userRole?: string; // 추가: 사용자 권한
+  userRole?: string;
 };
 
 type MenuKey =

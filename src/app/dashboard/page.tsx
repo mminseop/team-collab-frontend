@@ -10,6 +10,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { SettingsDialog } from "@/components/common/SettingsDialog";
 import { useLogout } from "@/hooks/useLogout";
+import { AnnouncementPanel } from "@/components/announcements/AnnouncementPanel";
 
 export default function DashboardPage() {
   const {
@@ -31,11 +32,10 @@ export default function DashboardPage() {
   );
 
   // 선택된 채널 상태
-  const [activeChannel, setActiveChannel] = useState<string>("");
+  const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
 
   // 보호 라우팅: user 없거나 에러 시 로그인 페이지로
   useEffect(() => {
-    // 로그아웃 중이거나 에러 있거나, 로딩 끝나고 user 없으면 리다이렉트
     if (logoutMutation.isPending || userError || (!userLoading && !user)) {
       window.location.href = "/";
     }
@@ -46,17 +46,13 @@ export default function DashboardPage() {
     return <div className={st.loading}>로딩중...</div>;
   }
 
-  // user 없음 (이 시점에서 확실히 인증 실패)
+  // user 없음
   if (!user) {
     window.location.href = "/";
     return null;
   }
 
-  // -----------------------------
-  // 부서별로 채널 배열을 그룹핑하는 로직
-  // 예) { "프론트엔드팀": [채널1, 채널5], "백엔드팀": [채널2, 채널6] ... }
-  // department_display_name 없으면 "전체 채널" 키로 저장
-  // -----------------------------
+  // 부서별로 채널 배열을 그룹핑
   const groupedChannels: Record<string, Channel[]> = channels.reduce(
     (acc: Record<string, Channel[]>, channel: Channel) => {
       const key = channel.department_display_name ?? "전체 채널";
@@ -67,7 +63,7 @@ export default function DashboardPage() {
     {}
   );
 
-  // 카테고리 (부서) 열림/닫힘 토글 핸들러
+  // 카테고리 열림/닫힘 토글
   const toggleCategory = (category: string) => {
     setOpenCategories((prev) => ({
       ...prev,
@@ -91,7 +87,6 @@ export default function DashboardPage() {
                 className={st.categoryHeader}
                 onClick={() => toggleCategory(deptName)}
               >
-                {/* MUI 화살표 아이콘 */}
                 <span className={st.arrow}>
                   {openCategories[deptName] ? (
                     <ArrowDropDownIcon fontSize="small" />
@@ -99,7 +94,6 @@ export default function DashboardPage() {
                     <ArrowRightIcon fontSize="small" />
                   )}
                 </span>
-                {/* 부서 이름 표시 */}
                 <span className={st.categoryTitle}>{deptName}</span>
               </div>
               <div
@@ -111,9 +105,9 @@ export default function DashboardPage() {
                   <div
                     key={channel.id}
                     className={`${st.channelItem} ${
-                      channel.name === activeChannel ? st.active : ""
+                      channel.id === activeChannel?.id ? st.active : ""
                     }`}
-                    onClick={() => setActiveChannel(channel.name)}
+                    onClick={() => setActiveChannel(channel)}
                   >
                     <span className={st.channelName}>
                       {channel.display_name}
@@ -145,24 +139,30 @@ export default function DashboardPage() {
           <div className={st.channelInfo}>
             <span className={st.hashIcon}>#</span>
             <span className={st.channelTitle}>
-              {activeChannel || "채널을 선택하세요"}
+              {activeChannel?.display_name || "채널을 선택하세요"}
             </span>
           </div>
         </div>
+
         <div className={st.contentArea}>
-          <div className={st.welcomeSection}>
-            <h1>{activeChannel || "채널을 선택하세요"}</h1>
-            <p>
-              총 <strong>{channels.length}</strong>개 채널 사용 가능
-            </p>
-            <p>
-              선택된 채널: <strong>{activeChannel}</strong>
-            </p>
-          </div>
+          {activeChannel ? (
+            <AnnouncementPanel
+              channelId={activeChannel.id}
+              userRole={user.role}
+              userId={user.id}
+            />
+          ) : (
+            <div className={st.welcomeSection}>
+              <h1>채널을 선택하세요</h1>
+              <p>
+                총 <strong>{channels.length}</strong>개 채널 사용 가능
+              </p>
+            </div>
+          )}
         </div>
       </main>
 
-      {/* 설정 모달 공통 컴포넌트 */}
+      {/* 설정 모달 */}
       <SettingsDialog
         open={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}

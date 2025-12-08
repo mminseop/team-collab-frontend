@@ -1,12 +1,11 @@
 "use client";
 
 import st from "./AnnouncementPanel.module.scss";
-import { useState, useRef, useEffect, useMemo } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   useAnnouncements,
   useCreateAnnouncement,
   useDeleteAnnouncement,
-  Announcement,
 } from "@/hooks/useAnnouncements";
 import SendIcon from "@mui/icons-material/Send";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -27,16 +26,13 @@ export const AnnouncementPanel = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const { data: response, isLoading } = useAnnouncements(channelId);
+  const { data: announcements, isLoading } = useAnnouncements(channelId);
   const createMutation = useCreateAnnouncement();
   const deleteMutation = useDeleteAnnouncement();
 
-  // useMemo로 announcements 메모이제이션
-  const announcements: Announcement[] = useMemo(() => {
-    return response?.data ?? [];
-  }, [response]);
-
   const isAdmin = userRole === "ADMIN";
+
+  const list = announcements ?? [];
 
   // 스크롤을 맨 아래로
   const scrollToBottom = () => {
@@ -127,14 +123,14 @@ export const AnnouncementPanel = ({
     <div className={st.container}>
       {/* 메시지 목록 */}
       <div className={st.messageList}>
-        {announcements.length === 0 ? (
+        {list.length === 0 ? (
           <div className={st.emptyState}>
             <CampaignIcon className={st.emptyIcon} />
             <p>아직 공지사항이 없습니다.</p>
             {isAdmin && <p>첫 번째 공지사항을 작성해보세요!</p>}
           </div>
         ) : (
-          announcements.map((announcement) => (
+          list.map((announcement) => (
             <div key={announcement.id} className={st.message}>
               <div className={st.messageHeader}>
                 <div className={st.avatar}>

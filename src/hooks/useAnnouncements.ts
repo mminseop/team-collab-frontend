@@ -17,11 +17,6 @@ interface CreateAnnouncementData {
   channel_id?: number;
 }
 
-interface AnnouncementResponse {
-  success: boolean;
-  data: Announcement[];
-}
-
 interface CreateAnnouncementResponse {
   success: boolean;
   data: Announcement;
@@ -32,19 +27,31 @@ interface DeleteAnnouncementResponse {
   message: string;
 }
 
-// 공지사항 목록 조회
+// 공지사항 목록 조회 (배열 직접 반환)
 export const useAnnouncements = (channelId?: number) => {
   return useQuery({
     queryKey: ["announcements", channelId],
-    queryFn: async (): Promise<AnnouncementResponse> => {
+    queryFn: async (): Promise<Announcement[]> => {  // 배열 타입
       const params = channelId ? { channel_id: channelId } : {};
-      const response: AxiosResponse<AnnouncementResponse> = await api.get(
+      const response: AxiosResponse = await api.get(
         "/api/announcements",
         { params }
       );
-      return response.data;
+      
+      // 배열이면 그대로 반환
+      if (Array.isArray(response.data)) {
+        return response.data;
+      }
+      
+      // 객체면 data 프로퍼티 반환
+      if (response.data?.data) {
+        return response.data.data;
+      }
+      
+      // 둘 다 아니면 빈 배열
+      return [];
     },
-    refetchInterval: 30000, // 30초마다 자동 새로고침 (일단 임시)
+    refetchInterval: 30000,
   });
 };
 
@@ -61,7 +68,6 @@ export const useCreateAnnouncement = () => {
       return response.data;
     },
     onSuccess: () => {
-      // 모든 공지사항 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: ["announcements"] });
     },
   });

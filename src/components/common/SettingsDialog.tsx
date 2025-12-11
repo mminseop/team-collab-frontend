@@ -18,6 +18,8 @@ import ArticleIcon from "@mui/icons-material/Article";
 import PeopleIcon from "@mui/icons-material/People";
 import TagIcon from "@mui/icons-material/Tag";
 import BusinessIcon from "@mui/icons-material/Business";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import { AddMemberModal } from "./AddMemberModal";
 import { Department, useDepartments } from "@/hooks/useDepartments";
 import { useAddUser } from "@/hooks/useAddUser";
@@ -39,7 +41,9 @@ type MenuKey =
   | "integrations"
   | "members"
   | "channels"
-  | "departments";
+  | "departments"
+  | "attendance"
+  | "myAttendance";
 
 type AddMemberData = {
   email: string;
@@ -49,22 +53,34 @@ type AddMemberData = {
   role: string;
 };
 
+// 임시 출퇴근 데이터 타입
+type AttendanceRecord = {
+  id: string;
+  userId: string;
+  userName: string;
+  department: string;
+  date: string;
+  checkIn: string;
+  checkOut: string | null;
+  workHours: string;
+  status: "출근" | "지각" | "결근" | "퇴근";
+};
+
 export function SettingsDialog({
   open,
   onClose,
   onLogout,
-  userRole, // props에서 받기
+  userRole,
 }: SettingsDialogProps) {
   const [activeMenu, setActiveMenu] = useState<MenuKey>("account");
+  const [selectedMonth, setSelectedMonth] = useState<string>("2024-12");
   const isAdmin = userRole === "ADMIN";
 
   const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
 
-  // departments 훅
   const { data: departmentsResponse } = useDepartments();
   const departments: Department[] = departmentsResponse?.data ?? [];
 
-  // 팀원 추가 mutation
   const addUserMutation = useAddUser();
 
   const handleAddMember = (data: AddMemberData) => {
@@ -74,16 +90,93 @@ export function SettingsDialog({
         setIsAddMemberOpen(false);
       },
       onError: (error) => {
-        const errorMessage =
-          error || "팀원 추가에 실패했습니다.";
+        const errorMessage = error || "팀원 추가에 실패했습니다.";
         alert(errorMessage);
       },
     });
   };
 
-  // 일반 메뉴
+  // 임시 출퇴근 데이터 (실제로는 API에서 가져와야 함)
+  const mockAttendanceData: AttendanceRecord[] = [
+    {
+      id: "1",
+      userId: "user1",
+      userName: "김철수",
+      department: "개발팀",
+      date: "2024-12-11",
+      checkIn: "09:00",
+      checkOut: "18:30",
+      workHours: "9h 30m",
+      status: "퇴근",
+    },
+    {
+      id: "2",
+      userId: "user2",
+      userName: "이영희",
+      department: "디자인팀",
+      date: "2024-12-11",
+      checkIn: "09:15",
+      checkOut: null,
+      workHours: "-",
+      status: "지각",
+    },
+    {
+      id: "3",
+      userId: "user3",
+      userName: "박민수",
+      department: "기획팀",
+      date: "2024-12-11",
+      checkIn: "08:50",
+      checkOut: "18:00",
+      workHours: "9h 10m",
+      status: "퇴근",
+    },
+  ];
+
+  // 내 출퇴근 기록 (임시 데이터)
+  const myAttendanceData: AttendanceRecord[] = [
+    {
+      id: "1",
+      userId: "currentUser",
+      userName: "홍길동",
+      department: "개발팀",
+      date: "2024-12-11",
+      checkIn: "09:00",
+      checkOut: "18:30",
+      workHours: "9h 30m",
+      status: "퇴근",
+    },
+    {
+      id: "2",
+      userId: "currentUser",
+      userName: "홍길동",
+      department: "개발팀",
+      date: "2024-12-10",
+      checkIn: "09:05",
+      checkOut: "18:20",
+      workHours: "9h 15m",
+      status: "퇴근",
+    },
+    {
+      id: "3",
+      userId: "currentUser",
+      userName: "홍길동",
+      department: "개발팀",
+      date: "2024-12-09",
+      checkIn: "09:00",
+      checkOut: "18:00",
+      workHours: "9h 0m",
+      status: "퇴근",
+    },
+  ];
+
   const commonMenuItems = [
     { key: "account" as MenuKey, label: "내 계정", icon: <PersonIcon /> },
+    {
+      key: "myAttendance" as MenuKey,
+      label: "내 출퇴근",
+      icon: <ScheduleIcon />,
+    },
     {
       key: "notifications" as MenuKey,
       label: "알림 설정",
@@ -108,7 +201,6 @@ export function SettingsDialog({
     },
   ];
 
-  // 관리자 전용 메뉴
   const adminMenuItems = [
     { key: "members" as MenuKey, label: "팀원 관리", icon: <PeopleIcon /> },
     { key: "channels" as MenuKey, label: "채널 관리", icon: <TagIcon /> },
@@ -117,7 +209,27 @@ export function SettingsDialog({
       label: "부서 관리",
       icon: <BusinessIcon />,
     },
+    {
+      key: "attendance" as MenuKey,
+      label: "출퇴근 관리",
+      icon: <AccessTimeIcon />,
+    },
   ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "출근":
+        return st.statusWorking;
+      case "퇴근":
+        return st.statusLeft;
+      case "지각":
+        return st.statusLate;
+      case "결근":
+        return st.statusAbsent;
+      default:
+        return "";
+    }
+  };
 
   const renderContent = () => {
     switch (activeMenu) {
@@ -138,6 +250,190 @@ export function SettingsDialog({
               <input type="text" placeholder="부서명" disabled />
             </div>
             <button className={st.saveBtn}>변경사항 저장</button>
+          </div>
+        );
+
+      case "myAttendance":
+        return (
+          <div className={st.contentSection}>
+            <h2>내 출퇴근 기록</h2>
+            <div className={st.attendanceHeader}>
+              <div className={st.monthSelector}>
+                <label>조회 월</label>
+                <input
+                  type="month"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className={st.monthInput}
+                />
+              </div>
+              <div className={st.attendanceStats}>
+                <div className={st.statCard}>
+                  <span className={st.statLabel}>이번 달 근무일</span>
+                  <span className={st.statValue}>20일</span>
+                </div>
+                <div className={st.statCard}>
+                  <span className={st.statLabel}>평균 근무시간</span>
+                  <span className={st.statValue}>9h 15m</span>
+                </div>
+                <div className={st.statCard}>
+                  <span className={st.statLabel}>지각</span>
+                  <span className={`${st.statValue} ${st.warning}`}>2회</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={st.attendanceTable}>
+              <div className={st.tableHeader}>
+                <div className={st.tableCell}>날짜</div>
+                <div className={st.tableCell}>출근 시간</div>
+                <div className={st.tableCell}>퇴근 시간</div>
+                <div className={st.tableCell}>근무 시간</div>
+                <div className={st.tableCell}>상태</div>
+              </div>
+              {myAttendanceData.map((record) => (
+                <div key={record.id} className={st.tableRow}>
+                  <div className={st.tableCell}>
+                    <span className={st.dateText}>{record.date}</span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span className={st.timeText}>{record.checkIn}</span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span className={st.timeText}>
+                      {record.checkOut || "-"}
+                    </span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span className={st.hoursText}>{record.workHours}</span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span
+                      className={`${st.statusBadge} ${getStatusColor(
+                        record.status
+                      )}`}
+                    >
+                      {record.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case "attendance":
+        return (
+          <div className={st.contentSection}>
+            <h2>출퇴근 관리</h2>
+            <div className={st.attendanceHeader}>
+              <div className={st.monthSelector}>
+                <label>조회 월</label>
+                <input
+                  type="month"
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  className={st.monthInput}
+                />
+              </div>
+              <div className={st.filterButtons}>
+                <button className={st.filterBtn}>전체</button>
+                <button className={st.filterBtn}>출근</button>
+                <button className={st.filterBtn}>지각</button>
+                <button className={st.filterBtn}>결근</button>
+              </div>
+            </div>
+
+            <div className={st.attendanceSummary}>
+              <div className={st.summaryCard}>
+                <div className={st.summaryIcon}>
+                  <PeopleIcon />
+                </div>
+                <div className={st.summaryInfo}>
+                  <span className={st.summaryLabel}>전체 팀원</span>
+                  <span className={st.summaryValue}>24명</span>
+                </div>
+              </div>
+              <div className={st.summaryCard}>
+                <div className={`${st.summaryIcon} ${st.success}`}>
+                  <AccessTimeIcon />
+                </div>
+                <div className={st.summaryInfo}>
+                  <span className={st.summaryLabel}>출근</span>
+                  <span className={st.summaryValue}>20명</span>
+                </div>
+              </div>
+              <div className={st.summaryCard}>
+                <div className={`${st.summaryIcon} ${st.warning}`}>
+                  <ScheduleIcon />
+                </div>
+                <div className={st.summaryInfo}>
+                  <span className={st.summaryLabel}>지각</span>
+                  <span className={st.summaryValue}>3명</span>
+                </div>
+              </div>
+              <div className={st.summaryCard}>
+                <div className={`${st.summaryIcon} ${st.danger}`}>
+                  <CloseIcon />
+                </div>
+                <div className={st.summaryInfo}>
+                  <span className={st.summaryLabel}>결근</span>
+                  <span className={st.summaryValue}>1명</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={st.attendanceTable}>
+              <div className={st.tableHeader}>
+                <div className={st.tableCell}>이름</div>
+                <div className={st.tableCell}>부서</div>
+                <div className={st.tableCell}>날짜</div>
+                <div className={st.tableCell}>출근 시간</div>
+                <div className={st.tableCell}>퇴근 시간</div>
+                <div className={st.tableCell}>근무 시간</div>
+                <div className={st.tableCell}>상태</div>
+              </div>
+              {mockAttendanceData.map((record) => (
+                <div key={record.id} className={st.tableRow}>
+                  <div className={st.tableCell}>
+                    <div className={st.userInfo}>
+                      <div className={st.userAvatar}>
+                        {record.userName.charAt(0)}
+                      </div>
+                      <span>{record.userName}</span>
+                    </div>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span className={st.departmentBadge}>
+                      {record.department}
+                    </span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span className={st.dateText}>{record.date}</span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span className={st.timeText}>{record.checkIn}</span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span className={st.timeText}>
+                      {record.checkOut || "-"}
+                    </span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span className={st.hoursText}>{record.workHours}</span>
+                  </div>
+                  <div className={st.tableCell}>
+                    <span
+                      className={`${st.statusBadge} ${getStatusColor(
+                        record.status
+                      )}`}
+                    >
+                      {record.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         );
 
@@ -345,7 +641,6 @@ export function SettingsDialog({
           </div>
         );
 
-      // 관리자 전용 메뉴들
       case "members":
         return (
           <>
@@ -422,7 +717,6 @@ export function SettingsDialog({
         <div className={st.sidebar}>
           <div className={st.sidebarContent}>
             <nav className={st.menuList}>
-              {/* 관리자 메뉴 섹션 */}
               {isAdmin && (
                 <>
                   <div className={st.menuSectionTitle}>관리자 메뉴</div>
@@ -442,7 +736,6 @@ export function SettingsDialog({
                 </>
               )}
 
-              {/* 일반 메뉴 섹션 */}
               {commonMenuItems.map((item) => (
                 <button
                   key={item.key}

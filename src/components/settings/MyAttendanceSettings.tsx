@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import st from "@/components/common/SettingsDialog.module.scss";
-import { AttendanceRecord } from "@/types/settings";
 import { useAttendance } from "@/hooks/useAttendance";
+import { useMyAttendance, useMyAttendanceStats } from "@/hooks/useMyAttendance";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
@@ -39,33 +39,13 @@ export function MyAttendanceSettings({
     handleCheckOut,
   } = useAttendance();
 
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | undefined>(undefined);
 
-  // 임시 데이터
-  const myAttendanceData: AttendanceRecord[] = [
-    {
-      id: "1",
-      userId: "currentUser",
-      userName: "홍길동",
-      department: "개발팀",
-      date: "2024-12-11",
-      checkIn: "09:00",
-      checkOut: "18:30",
-      workHours: "9h 30m",
-      status: "퇴근",
-    },
-    {
-      id: "2",
-      userId: "currentUser",
-      userName: "홍길동",
-      department: "개발팀",
-      date: "2024-12-10",
-      checkIn: "09:05",
-      checkOut: "18:20",
-      workHours: "9h 15m",
-      status: "퇴근",
-    },
-  ];
+  // 출퇴근 기록 조회
+  const { data: attendanceData = [], isLoading } = useMyAttendance(selectedMonth);
+
+  // 통계 조회
+  const { data: stats } = useMyAttendanceStats(selectedMonth);
 
   const onCheckIn = () => {
     const interval = handleCheckIn();
@@ -78,6 +58,7 @@ export function MyAttendanceSettings({
     handleCheckOut(intervalId);
     if (intervalId) {
       clearInterval(intervalId);
+      setIntervalId(undefined);
     }
   };
 
@@ -147,20 +128,28 @@ export function MyAttendanceSettings({
             className={st.monthInput}
           />
         </div>
-        <div className={st.attendanceStats}>
-          <div className={st.statCard}>
-            <span className={st.statLabel}>이번 달 근무일</span>
-            <span className={st.statValue}>20일</span>
+        {stats && (
+          <div className={st.attendanceStats}>
+            <div className={st.statCard}>
+              <span className={st.statLabel}>이번 달 근무일</span>
+              <span className={st.statValue}>{stats.workDays}일</span>
+            </div>
+            <div className={st.statCard}>
+              <span className={st.statLabel}>평균 근무시간</span>
+              <span className={st.statValue}>{stats.avgWorkHours}</span>
+            </div>
+            <div className={st.statCard}>
+              <span className={st.statLabel}>지각</span>
+              <span
+                className={`${st.statValue} ${
+                  stats.lateCount > 0 ? st.warning : ""
+                }`}
+              >
+                {stats.lateCount}회
+              </span>
+            </div>
           </div>
-          <div className={st.statCard}>
-            <span className={st.statLabel}>평균 근무시간</span>
-            <span className={st.statValue}>9h 15m</span>
-          </div>
-          <div className={st.statCard}>
-            <span className={st.statLabel}>지각</span>
-            <span className={`${st.statValue} ${st.warning}`}>2회</span>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* 출퇴근 기록 테이블 */}
@@ -172,29 +161,37 @@ export function MyAttendanceSettings({
           <div className={st.tableCell}>근무 시간</div>
           <div className={st.tableCell}>상태</div>
         </div>
-        {myAttendanceData.map((record) => (
-          <div key={record.id} className={st.tableRow}>
-            <div className={st.tableCell}>
-              <span className={st.dateText}>{record.date}</span>
+        {isLoading ? (
+          <div className={st.loadingMessage}>로딩 중...</div>
+        ) : attendanceData.length === 0 ? (
+          <div className={st.emptyMessage}>출퇴근 기록이 없습니다.</div>
+        ) : (
+          attendanceData.map((record) => (
+            <div key={record.id} className={st.tableRow}>
+              <div className={st.tableCell}>
+                <span className={st.dateText}>{record.date}</span>
+              </div>
+              <div className={st.tableCell}>
+                <span className={st.timeText}>{record.checkIn}</span>
+              </div>
+              <div className={st.tableCell}>
+                <span className={st.timeText}>{record.checkOut || "-"}</span>
+              </div>
+              <div className={st.tableCell}>
+                <span className={st.hoursText}>{record.workHours}</span>
+              </div>
+              <div className={st.tableCell}>
+                <span
+                  className={`${st.statusBadge} ${getStatusColor(
+                    record.status
+                  )}`}
+                >
+                  {record.status}
+                </span>
+              </div>
             </div>
-            <div className={st.tableCell}>
-              <span className={st.timeText}>{record.checkIn}</span>
-            </div>
-            <div className={st.tableCell}>
-              <span className={st.timeText}>{record.checkOut || "-"}</span>
-            </div>
-            <div className={st.tableCell}>
-              <span className={st.hoursText}>{record.workHours}</span>
-            </div>
-            <div className={st.tableCell}>
-              <span
-                className={`${st.statusBadge} ${getStatusColor(record.status)}`}
-              >
-                {record.status}
-              </span>
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );

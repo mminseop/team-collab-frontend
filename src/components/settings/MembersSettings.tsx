@@ -2,7 +2,7 @@
 
 import st from "./SettingsDialog.module.scss";
 import PeopleIcon from "@mui/icons-material/People";
-import { AddMemberModal } from "./AddMemberModal";
+import { AddMemberModal } from "@/components/common/AddMemberModal";
 import { Department } from "@/hooks/useDepartments";
 import { AddMemberData } from "@/types/settings";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import st from "./SettingsDialog.module.scss";
+import st from "@/components/common/SettingsDialog.module.scss";
 import CloseIcon from "@mui/icons-material/Close";
 import PeopleIcon from "@mui/icons-material/People";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";

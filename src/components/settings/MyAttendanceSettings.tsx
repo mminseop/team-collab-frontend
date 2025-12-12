@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import st from "./SettingsDialog.module.scss";
+import st from "@/components/common/SettingsDialog.module.scss";
 import { AttendanceRecord } from "@/types/settings";
 import { useAttendance } from "@/hooks/useAttendance";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";

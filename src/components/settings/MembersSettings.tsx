@@ -1,6 +1,6 @@
 "use client";
 
-import st from "./SettingsDialog.module.scss";
+import st from "@/components/common/SettingsDialog.module.scss";
 import PeopleIcon from "@mui/icons-material/People";
 import { AddMemberModal } from "@/components/common/AddMemberModal";
 import { Department } from "@/hooks/useDepartments";

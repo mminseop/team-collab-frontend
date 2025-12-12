@@ -1,6 +1,6 @@
 "use client";
 
-import st from "./SettingsDialog.module.scss";
+import st from "@/components/common/SettingsDialog.module.scss";
 import EmailIcon from "@mui/icons-material/Email";
 import WidgetsIcon from "@mui/icons-material/Widgets";
 import ArticleIcon from "@mui/icons-material/Article";

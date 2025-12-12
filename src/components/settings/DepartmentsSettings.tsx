@@ -1,6 +1,6 @@
 "use client";
 
-import st from "./SettingsDialog.module.scss";
+import st from "@/components/common/SettingsDialog.module.scss";
 import BusinessIcon from "@mui/icons-material/Business";
 
 export function DepartmentsSettings() {

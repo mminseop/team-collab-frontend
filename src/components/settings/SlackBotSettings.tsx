@@ -1,6 +1,6 @@
 "use client";
 
-import st from "./SettingsDialog.module.scss";
+import st from "@/components/common/SettingsDialog.module.scss";
 import SmartToyIcon from "@mui/icons-material/SmartToy";
 
 export function SlackBotSettings() {

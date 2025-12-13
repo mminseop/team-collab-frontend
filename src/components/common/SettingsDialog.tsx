@@ -2,7 +2,7 @@
 
 import { Dialog } from "@mui/material";
 import st from "./SettingsDialog.module.scss";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { MenuSidebar } from "@/components/settings/MenuSidebar";
 import { AccountSettings } from "@/components/settings/AccountSettings";
@@ -35,9 +35,17 @@ export function SettingsDialog({
   userRole,
 }: SettingsDialogProps) {
   const [activeMenu, setActiveMenu] = useState<MenuKey>("account");
-  const [selectedMonth, setSelectedMonth] = useState<string>("2024-12");
+
+  const currentMonth = useMemo(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    return `${year}-${month}`;
+  }, []);
+
+  const [selectedMonth, setSelectedMonth] = useState<string>(currentMonth);
   const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
-  
+
   const isAdmin = userRole === "ADMIN";
 
   const { data: departmentsResponse } = useDepartments();

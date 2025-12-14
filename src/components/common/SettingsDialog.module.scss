@@ -732,6 +732,55 @@
   border: 1px solid #4e5058;
 }
 
+.loadingMessage,
+.emptyMessage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 200px;
+  background: #2f3136;
+}
+
+.loadingMessage {
+  color: #5865f2;
+  animation: pulse 1.5s ease-in-out infinite;
+
+  &::before {
+    content: "⏳ ";
+    font-size: 20px;
+    margin-right: 8px;
+  }
+}
+
+.emptyMessage {
+  color: #b9bbbe;
+  flex-direction: column;
+  gap: 12px;
+
+  &::before {
+    content: "📭";
+    font-size: 48px;
+    display: block;
+    margin-bottom: 8px;
+    opacity: 0.5;
+  }
+}
+
+// 로딩 애니메이션
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
 .tableHeader {
   display: grid;
   grid-template-columns: 1.2fr 1fr 1fr 0.8fr 0.8fr 0.8fr 0.8fr;

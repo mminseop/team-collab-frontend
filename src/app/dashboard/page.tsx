@@ -13,6 +13,8 @@ import { useLogout } from "@/hooks/useLogout";
 import { AnnouncementPanel } from "@/components/announcements/AnnouncementPanel";
 
 export default function DashboardPage() {
+  // 알림 봇 테스트로 주석 추가
+  
   const {
     data: userResponse,
     isLoading: userLoading,

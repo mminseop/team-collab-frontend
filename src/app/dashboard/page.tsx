@@ -13,6 +13,7 @@ import { useLogout } from "@/hooks/useLogout";
 import { AnnouncementPanel } from "@/components/announcements/AnnouncementPanel";
 
 export default function DashboardPage() {
+    // test
   const {
     data: userResponse,
     isLoading: userLoading,

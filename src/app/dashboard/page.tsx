@@ -11,6 +11,7 @@ import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { SettingsDialog } from "@/components/common/SettingsDialog";
 import { useLogout } from "@/hooks/useLogout";
 import { AnnouncementPanel } from "@/components/announcements/AnnouncementPanel";
+import { TeamTasksPanel } from "@/components/tasks/TeamTasksPanel";
 
 export default function DashboardPage() {
   const {
@@ -74,6 +75,9 @@ export default function DashboardPage() {
   const handleLogout = () => {
     logoutMutation.mutate();
   };
+
+  // 선택된 채널이 tasks-all인지 확인
+  const isTasksAllChannel = activeChannel?.name === "tasks-all";
 
   return (
     <div className={st.container}>
@@ -146,11 +150,17 @@ export default function DashboardPage() {
 
         <div className={st.contentArea}>
           {activeChannel ? (
-            <AnnouncementPanel
-              channelId={activeChannel.id}
-              userRole={user.role}
-              userId={user.id}
-            />
+            isTasksAllChannel ? (
+              // tasks-all 채널이면 TeamTasksPanel 렌더링
+              <TeamTasksPanel userRole={user.role} />
+            ) : (
+              // 그 외 채널이면 AnnouncementPanel 렌더링
+              <AnnouncementPanel
+                channelId={activeChannel.id}
+                userRole={user.role}
+                userId={user.id}
+              />
+            )
           ) : (
             <div className={st.welcomeSection}>
               <h1>채널을 선택하세요</h1>

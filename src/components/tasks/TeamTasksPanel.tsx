@@ -144,7 +144,7 @@ export const TeamTasksPanel = ({ userRole }: TeamTasksPanelProps) => {
           <h2>전체 할일</h2>
           <span className={st.subtitle}>팀별 작업 현황을 확인하세요</span>
         </div>
-        {userRole === "admin" && (
+        {userRole === "ADMIN" && (
           <button
             className={st.addButton}
             onClick={() => setIsAddingTask(true)}
@@ -233,7 +233,7 @@ export const TeamTasksPanel = ({ userRole }: TeamTasksPanelProps) => {
                   <span className={st.taskAuthor}>{task.createdBy}</span>
                   <span className={st.taskDate}>{task.createdAt}</span>
                 </div>
-                {userRole === "admin" && (
+                {userRole === "ADMIN" && (
                   <div className={st.taskActions}>
                     <button className={st.actionButton}>
                       <EditIcon fontSize="small" />

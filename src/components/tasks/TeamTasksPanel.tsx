@@ -149,7 +149,7 @@ export const TeamTasksPanel = ({ userRole }: TeamTasksPanelProps) => {
             className={st.addButton}
             onClick={() => setIsAddingTask(true)}
           >
-            <AddIcon fontSize="small" />
+            <AddIcon fontSize="small" />np
             새 할일 추가
           </button>
         )}
